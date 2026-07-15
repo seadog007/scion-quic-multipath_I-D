@@ -23,25 +23,25 @@ In addition, it provides techniques and guidance to maintain the security
 of QUIC-MP and SCION,
 and to leverage path-aware multi-path networking with QUIC-MP. 
     " name="description">
-<meta content="xml2rfc 3.30.1" name="generator">
+<meta content="xml2rfc 3.34.0" name="generator">
 <meta content="SCION" name="keyword">
 <meta content="QUIC" name="keyword">
 <meta content="multipath" name="keyword">
 <meta content="draft-zaeschke-scion-quic-multipath-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.30.1
-    Python 3.12.11
-    ConfigArgParse 1.7
+  xml2rfc 3.34.0
+    Python 3.14.5
+    ConfigArgParse 1.7.5
     google-i18n-address 3.1.1
-    intervaltree 3.1.0
+    intervaltree 3.2.1
     Jinja2 3.1.6
-    lxml 5.3.1
-    platformdirs 4.4.0
+    lxml 6.1.1
+    natsort 8.4.0
+    platformdirs 4.10.0
     pycountry 24.6.1
-    PyYAML 6.0.2
-    requests 2.32.5
-    setuptools 80.9.0
-    wcwidth 0.2.13
+    PyYAML 6.0.3
+    requests 2.33.1
+    wcwidth 0.8.2
 -->
 <link href="draft-zaeschke-scion-quic-multipath.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -182,7 +182,7 @@ and to leverage path-aware multi-path networking with QUIC-MP.
   font-weight: 400;
   font-display: swap;
   src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
-  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
   font-family: 'Oxygen Mono';
@@ -190,7 +190,8 @@ and to leverage path-aware multi-path networking with QUIC-MP.
   font-weight: 400;
   font-display: swap;
   src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 }
 
 @font-face {
@@ -307,16 +308,19 @@ h1, h2, h3, h4, h5, h6 {
   font-size-adjust: 0.5;
   color: var(--title-color);
 }
-h1#title {
-  font-size: 32px;
-  line-height: 40px;
-  clear: both;
-}
-h1#title, h1#rfcnum {
-  margin: 1.5em 0 0.2em;
-}
-h1#rfcnum + h1#title {
-  margin: 0.2em 0;
+h1 {
+  &#title {
+    font-size: 32px;
+    line-height: 40px;
+    clear: both;
+    margin: 1.5em 0 0.2em;
+  }
+  &#rfcnum {
+    margin: 1.5em 0 0.2em;
+    & + h1#title {
+      margin: 0.2em 0;
+    }
+  }
 }
 
 h1, h2, h3 {
@@ -336,10 +340,10 @@ h4, h5, h6 {
 #abstract+p {
   font-size: 18px;
   line-height: 24px;
-}
-#abstract+p code, #abstract+p samp, #abstract+p tt {
-  font-size: 16px;
-  line-height: 0;
+  & code, & samp, & tt {
+    font-size: 16px;
+    line-height: 0;
+  }
 }
 
 p {
@@ -350,59 +354,59 @@ p {
 div {
   margin: 0;
 }
-.alignRight.art-text {
-  background-color: var(--highlight-color);
-  border: 1px solid var(--line-color);
-  border-radius: 3px;
-  padding: 0.5em 1em 0;
-  margin-bottom: 0.5em;
-}
-.alignRight.art-text pre {
-  padding: 0;
-  width: auto;
-}
 .alignRight {
   margin: 1em 0;
-}
-.alignRight > *:first-child {
-  border: none;
-  margin: 0;
-  float: right;
-  clear: both;
-}
-.alignRight > *:nth-child(2) {
-  clear: both;
-  display: block;
-  border: none;
+  &.art-text {
+    background-color: var(--highlight-color);
+    border: 1px solid var(--line-color);
+    border-radius: 3px;
+    padding: 0.5em 1em 0;
+    margin-bottom: 0.5em;
+    & pre {
+      padding: 0;
+      width: auto;
+    }
+  }
+  & > *:first-child {
+    border: none;
+    margin: 0;
+    float: right;
+    clear: both;
+  }
+  & > *:nth-child(2) {
+    clear: both;
+    display: block;
+    border: none;
+  }
 }
 svg {
   display: block;
-}
-/* font-family isn't space-separated, but =~ will have to do */
-svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
-  font-family: var(--font-mono);
-}
-.alignCenter.art-text {
-  background-color: var(--highlight-color);
-  border: 1px solid var(--line-color);
-  border-radius: 3px;
-  padding: 0.5em 1em 0;
-  margin-bottom: 0.5em;
-}
-.alignCenter.art-text pre {
-  padding: 0;
-  width: auto;
+  /* font-family isn't space-separated, but =~ will have to do */
+  &[font-family~="monospace" i], & [font-family~="monospace" i] {
+    font-family: var(--font-mono);
+  }
 }
 .alignCenter {
   margin: 1em 0;
-}
-.alignCenter > *:first-child {
-  border: none;
-  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
-     support flexbox yet.
-  */
-  display: table;
-  margin: 0 auto;
+  &.art-text {
+    background-color: var(--highlight-color);
+    border: 1px solid var(--line-color);
+    border-radius: 3px;
+    padding: 0.5em 1em 0;
+    margin-bottom: 0.5em;
+    & pre {
+      padding: 0;
+      width: auto;
+    }
+  }
+  & > *:first-child {
+    border: none;
+    /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+       support flexbox yet.
+    */
+    display: table;
+    margin: 0 auto;
+  }
 }
 
 /* lists */
@@ -440,26 +444,25 @@ dl {
     --indent: 5ch;
     & > dt {
       min-width: calc(var(--indent) - 2ch);
+      float: none;
     }
-  }
-  &.olPercent > dt {
-    float: none;
   }
 
   dl > dd > & {
     margin-top: 0.5em;
     margin-bottom: 0;
   }
-}
-dl:not(.dlNewline) > dt {
-  float: left;
-  margin-right: 2ch;
-  min-width: 8ch;
-}
-dl > dd {
-  margin-bottom: .8em;
-  margin-left: var(--indent) !important; /* stupid element overrides */
-  min-height: 2ex;
+
+  &:not(.dlNewline) > dt {
+    float: left;
+    margin-right: 2ch;
+    min-width: 8ch;
+  }
+  & > dd {
+    margin-bottom: .8em;
+    margin-left: var(--indent) !important; /* stupid element overrides */
+    min-height: 2ex;
+  }
 }
 :is(dl.compact, .dlCompact) > dd {
   margin-bottom: 0;
@@ -475,20 +478,22 @@ dl > dd {
 }
 
 /* links */
-a, a[href].selfRef:hover {
+a {
   text-decoration: none;
+  &[href] {
+    color: var(--link-color);
+    &:hover { text-decoration: underline; }
+    &.selfRef {
+      color: var(--text-color);
+      &:hover {
+        text-decoration: none;
+        background-color: var(--highlight-color);
+      }
+    }
+  }
 }
-a[href] {
-  color: var(--link-color);
-}
-a[href].selfRef, .iref + a[href].internal {
+.iref + a[href].internal {
   color: var(--text-color);
-}
-a[href]:hover {
-  text-decoration: underline;
-}
-a[href].selfRef:hover {
-  background-color: var(--highlight-color);
 }
 a.xref:is(.cite, .auto), :is(#status-of-memo, #copyright) a {
   white-space: nowrap;
@@ -524,9 +529,9 @@ img {
 figure {
   margin: 0.5em 0;
   padding: 0;
-}
-figure blockquote {
-  margin: 0.8em 0.4em 0.4em;
+  & blockquote {
+    margin: 0.8em 0.4em 0.4em;
+  }
 }
 figcaption, caption {
   font-style: italic;
@@ -536,17 +541,19 @@ figcaption, caption {
 }
 @media screen {
   /* Auto-collapse boilerplate. */
-  :is(#status-of-memo, #copyright) p {
-    margin: -2px 0;
-    max-height: 0;
-    transition: max-height 2s ease, margin 0.5s ease 0.5s;
-    overflow: hidden;
-  }
-  :is(#status-of-memo, #copyright):hover p,
-  :is(#status-of-memo, #copyright) h2:target ~ p {
-    margin: 0.5em 0;
-    max-height: 500px;
-    overflow: auto;
+  :is(#status-of-memo, #copyright) {
+    & p {
+      margin: -2px 0;
+      max-height: 0;
+      transition: max-height 2s ease, margin 0.5s ease 0.5s;
+      overflow: hidden;
+    }
+    &:hover p,
+    & h2:target ~ p {
+      margin: 0.5em 0;
+      max-height: 500px;
+      overflow: auto;
+    }
   }
   pre, svg {
     display: inline-block;
@@ -582,6 +589,7 @@ aside, blockquote {
 }
 blockquote {
   margin: 1em 0;
+  border-left: 2px var(--pilcrow-strong) solid;
 }
 cite {
   display: block;
@@ -595,25 +603,17 @@ table {
   max-width: 100%;
   margin: 0 0 1em;
   border-collapse: collapse;
-}
-table.right {
-  margin-left: auto;
-}
-table.center {
-  margin-left: auto;
-  margin-right: auto;
-}
-table.left {
-  margin-right: auto;
-}
-table .text-left {
-  text-align: left;
-}
-table .text-center {
-  text-align: center;
-}
-table .text-right {
-  text-align: right;
+  &.right { margin-left: auto; }
+  &.center { margin-left: auto; margin-right: auto; }
+  &.left { margin-right: auto; }
+  & .text-left { text-align: left; }
+  & .text-center { text-align: center; }
+  & .text-right { text-align: right; }
+  & caption {
+    margin: 0;
+    padding: 3px 0 3px 1em;
+  }
+  & p { margin: 0; }
 }
 
 thead, tbody {
@@ -633,13 +633,6 @@ th {
 :is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
   background-color: var(--highlight-color);
 }
-table caption {
-  margin: 0;
-  padding: 3px 0 3px 1em;
-}
-table p {
-  margin: 0;
-}
 
 /* pilcrow */
 a.pilcrow {
@@ -650,18 +643,16 @@ a.pilcrow {
     color: var(--pilcrow-weak);
     &:hover { text-decoration: none; }
   }
-}
-@media not print {
-  :hover > a.pilcrow {
-    opacity: 1;
+  @media not print {
+    :hover > &, &:focus {
+      opacity: 1;
+    }
+    &[href]:hover {
+      color: var(--pilcrow-strong);
+      background-color: transparent;
+    }
   }
-  a.pilcrow[href]:hover {
-    color: var(--pilcrow-strong);
-    background-color: transparent;
-  }
-}
-@media print {
-  a.pilcrow {
+  @media print {
     display: none;
   }
 }
@@ -720,9 +711,9 @@ sub, sup {
   font-size: 0.9em;
   font-style: italic;
   margin-top: 2em;
-}
-.docInfo .prepared {
-  float: right;
+  & .prepared {
+    float: right;
+  }
 }
 
 /* table of contents */
@@ -812,23 +803,27 @@ hr.addr {
   max-width: calc(100% - 16px);
 }
 @media (min-width: 500px) {
-  #authors-addresses > section {
-    column-count: 2;
-    column-gap: 20px;
-  }
-  #authors-addresses > section > h2 {
-    column-span: all;
-  }
-  /* hack for break-inside: avoid-column */
-  #authors-addresses address {
-    display: inline-block;
-    break-inside: avoid-column;
+  #authors-addresses {
+    & > section {
+      column-count: 2;
+      column-gap: 20px;
+    }
+    & > section > h2 {
+      column-span: all;
+    }
+    /* hack for break-inside: avoid-column */
+    & address {
+      display: inline-block;
+      break-inside: avoid-column;
+    }
   }
 }
 
 /* Comments */
-.rfcEditorRemove p:first-of-type {
-  font-style: italic;
+.rfcEditorRemove {
+  & p:first-of-type {
+    font-style: italic;
+  }
 }
 .cref {
   background-color: rgba(249, 232, 105, 0.3);
@@ -839,19 +834,21 @@ hr.addr {
 }
 
 @media screen {
-  #toc nav {
-    font-family: var(--font-title);
-    font-weight: 360;
-    & > ul { margin-bottom: 2em; }
-    & ul {
-      margin: 0 0 0 4px;
-      & :is(p, li) {
-        margin: 2px 0;
+  #toc {
+    & nav {
+      font-family: var(--font-title);
+      font-weight: 360;
+      & > ul { margin-bottom: 2em; }
+      & ul {
+        margin: 0 0 0 4px;
+        & :is(p, li) {
+          margin: 2px 0;
+        }
       }
     }
-  }
-  #toc a.toplink {
-    float: right;
+    & a.toplink {
+      float: right;
+    }
   }
 }
 @media not screen {
@@ -872,54 +869,54 @@ hr.addr {
     margin: 0;
     border-bottom: 1px solid #ccc;
     opacity: 0.6;
-  }
-  #toc h2 {
-    margin: 0;
-    padding: 2px 0 2px 6px;
-    padding-right: 1em;
-    font-size: 18px;
-    line-height: 24px;
-    min-width: 190px;
-    text-align: right;
-    background-color: #444;
-    color: white;
-    cursor: pointer;
-    &::before { /* css hamburger */
-      float: right;
-      position: relative;
-      width: 1em;
-      height: 1px;
-      left: -164px;
-      margin: 8px 0 0 0;
-      background: white none repeat scroll 0 0;
-      box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
-      content: "";
+    & h2 {
+      margin: 0;
+      padding: 2px 0 2px 6px;
+      padding-right: 1em;
+      font-size: 18px;
+      line-height: 24px;
+      min-width: 190px;
+      text-align: right;
+      background-color: #444;
+      color: white;
+      cursor: pointer;
+      &::before { /* css hamburger */
+        float: right;
+        position: relative;
+        width: 1em;
+        height: 1px;
+        left: -164px;
+        margin: 8px 0 0 0;
+        background: white none repeat scroll 0 0;
+        box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+        content: "";
+      }
     }
-  }
-  #toc nav {
-    display: none;
-    background-color: var(--background-color);
-    padding: 0.5em 1em 1em;
-    overflow: auto;
-    overscroll-behavior: contain;
-    height: calc(100vh - 48px);
-    border-left: 1px solid #ddd;
-  }
-  #toc.active {
-    opacity: 1;
-    & nav { display: block; }
-  }
-  /* Make the collapsed ToC header render white on gray also when it's a link */
-  #toc h2 a,
-  #toc h2 a:is(:link, :focus, :hover),
-  #toc a.toplink,
-  #toc a.toplink:hover {
-    color: white;
-    background-color: #444;
-    text-decoration: none;
-  }
-  #toc a.toplink {
-    margin: 2px 0.5em 0;
+    & nav {
+      display: none;
+      background-color: var(--background-color);
+      padding: 0.5em 1em 1em;
+      overflow: auto;
+      overscroll-behavior: contain;
+      height: calc(100vh - 48px);
+      border-left: 1px solid #ddd;
+    }
+    &.active {
+      opacity: 1;
+      & nav { display: block; }
+    }
+    /* Make the collapsed ToC header render white on gray also when it's a link */
+    & h2 a,
+    & h2 a:is(:link, :focus, :hover),
+    & a.toplink,
+    & a.toplink:hover {
+      color: white;
+      background-color: #444;
+      text-decoration: none;
+    }
+    & a.toplink {
+      margin: 2px 0.5em 0;
+    }
   }
 }
 
@@ -938,26 +935,26 @@ hr.addr {
     margin: 0;
     padding: 0;
     z-index: 1;
-  }
-  #toc h2 {
-    margin: 0;
-    padding: 0.25em 1em 1em 0;
-  }
-  #toc nav {
-    display: block;
-    height: calc(90vh - 84px);
-    bottom: 0;
-    padding: 0.5em 0 2em;
-    overflow: auto;
-    overscroll-behavior: contain;
-    scrollbar-width: thin;
+    & h2 {
+      margin: 0;
+      padding: 0.25em 1em 1em 0;
+    }
+    & nav {
+      display: block;
+      height: calc(90vh - 84px);
+      bottom: 0;
+      padding: 0.5em 0 2em;
+      overflow: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+    }
+    & a.toplink {
+      margin: 8px 0.5em 0;
+    }
   }
   img { /* future proofing */
     max-width: 100%;
     height: auto;
-  }
-  #toc a.toplink {
-    margin: 8px 0.5em 0;
   }
 }
 
@@ -973,12 +970,13 @@ hr.addr {
   #n-copyright-notice {
     border-bottom: none;
   }
-  #toc, #n-introduction {
-    page-break-before: always;
-  }
   #toc {
+    page-break-before: always;
     border-top: none;
     padding-top: 0;
+  }
+  #n-introduction {
+    page-break-before: always;
   }
   figure, pre, .vcard {
     page-break-inside: avoid;
@@ -1040,17 +1038,19 @@ hr.addr {
 }
 
 /* SVG Trick: a prefix match works because only black and white are allowed */
-svg :is([stroke="black"], [stroke^="#000"]) {
-  stroke: var(--text-color);
-}
-svg :is([stroke="white"], [stroke^="#fff"]) {
-  stroke: var(--background-color);
-}
-svg :is([fill="black"], [fill^="#000"], :not([fill])) {
-  fill: var(--text-color);
-}
-svg :is([fill="white"], [fill^="#fff"]) {
-  fill: var(--background-color);
+svg {
+  & :is([stroke="black"], [stroke^="#000"]) {
+    stroke: var(--text-color);
+  }
+  & :is([stroke="white"], [stroke^="#fff"]) {
+    stroke: var(--background-color);
+  }
+  & :is([fill="black"], [fill^="#000"], :not([fill])) {
+    fill: var(--text-color);
+  }
+  & :is([fill="white"], [fill^="#fff"]) {
+    fill: var(--background-color);
+  }
 }
 </style>
 
@@ -1341,6 +1341,17 @@ and to leverage path-aware multi-path networking with QUIC-MP.<a href="#section-
 </li>
                 </ul>
 </li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.13">
+                <p id="section-toc.1-1.5.2.13.1"><a href="#section-5.13" class="auto internal xref">5.13</a>. <a href="#name-address-spoofing" class="internal xref">Address Spoofing</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.13.2.1">
+                    <p id="section-toc.1-1.5.2.13.2.1.1"><a href="#section-5.13.1" class="auto internal xref">5.13.1</a>.  <a href="#name-key-implications-10" class="internal xref">Key Implications</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.13.2.2">
+                    <p id="section-toc.1-1.5.2.13.2.2.1"><a href="#section-5.13.2" class="auto internal xref">5.13.2</a>.  <a href="#name-recommendations-10" class="internal xref">Recommendations</a></p>
+</li>
+                </ul>
+</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
@@ -1375,10 +1386,13 @@ and to leverage path-aware multi-path networking with QUIC-MP.<a href="#section-
                 <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-path-injection" class="internal xref">Path Injection</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.1">
-                    <p id="section-toc.1-1.7.2.2.2.1.1"><a href="#section-7.2.1" class="auto internal xref">7.2.1</a>.  <a href="#name-traffic-redirection-over-di" class="internal xref">Traffic Redirection over Different Path</a></p>
+                    <p id="section-toc.1-1.7.2.2.2.1.1"><a href="#section-7.2.1" class="auto internal xref">7.2.1</a>.  <a href="#name-traffic-redirection-to-diff" class="internal xref">Traffic Redirection to Different AS</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.2">
-                    <p id="section-toc.1-1.7.2.2.2.2.1"><a href="#section-7.2.2" class="auto internal xref">7.2.2</a>.  <a href="#name-traffic-amplification" class="internal xref">Traffic Amplification</a></p>
+                    <p id="section-toc.1-1.7.2.2.2.2.1"><a href="#section-7.2.2" class="auto internal xref">7.2.2</a>.  <a href="#name-traffic-redirection-over-di" class="internal xref">Traffic Redirection over Different Path</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.3">
+                    <p id="section-toc.1-1.7.2.2.2.3.1"><a href="#section-7.2.3" class="auto internal xref">7.2.3</a>.  <a href="#name-traffic-amplification" class="internal xref">Traffic Amplification</a></p>
 </li>
                 </ul>
 </li>
@@ -1681,7 +1695,7 @@ should probe only the most promising paths (based on the metadata).
 Probing many paths should also be avoided to avoid overloading
 individual links, and it may effectively be limited (except traceroute)
 by the available path IDs and connection IDs, see
-<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16#section-7.2" class="relref">Section 7.2</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-4.3-4" class="pilcrow">¶</a></p>
+<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-7.2" class="relref">Section 7.2</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-4.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="policy-driven-routing-and-routing-constraints">
@@ -1752,12 +1766,12 @@ that IP addresses are unique in the scope of the network.<a href="#section-5.1-1
 <p id="section-5.1.1-1">QUIC-MP relies on the 4-tuple changes to trigger path validation.
 However, with SCION, the 4-tuple does not uniquely identify an endpoint.
 Two endpoints with identical IP/port could be in different ASes.
-An attacker could use endpoints with identical 4-tuple to reroute traffic
-to a different machine without triggering path validation, see
+An attacker could use endpoints with identical 4-tuple to reroute
+traffic to a different machine without triggering path validation, see
 <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a> and <a href="#token" class="auto internal xref">Section 5.11</a>.<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1.1-2">The implication of a skipped path validation is that a sever can be coaxed into
-sending QUIC packets to an unexpecting client. This is similar to the attacks
-described in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-8" class="relref">Section 8</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> and
+<p id="section-5.1.1-2">The implication of a skipped path validation is that a server can be
+coaxed into sending QUIC packets to an unexpecting client. This is
+similar to the attacks described in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-8" class="relref">Section 8</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> and
 <span><a href="https://rfc-editor.org/rfc/rfc9000#section-21.5.4" class="relref">Section 21.5.4</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span>.<a href="#section-5.1.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1766,80 +1780,49 @@ described in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-8" class=
           <h4 id="name-recommendations">
 <a href="#section-5.1.2" class="section-number selfRef">5.1.2. </a><a href="#name-recommendations" class="section-name selfRef">Recommendations</a>
           </h4>
-<p id="section-5.1.2-1">Attacks can be prevented by ensuring that one of the following is achieved:<a href="#section-5.1.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.1.2-2.1">
-              <p id="section-5.1.2-2.1.1">Prevent the attacker from exploiting a skipped path validation.<a href="#section-5.1.2-2.1.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-5.1.2-2.2">
-              <p id="section-5.1.2-2.2.1">Ensure that path validation is not skipped.<a href="#section-5.1.2-2.2.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-5.1.2-1.1">
+              <p id="section-5.1.2-1.1.1">To prevent attackers circumventing QUIC path validation, a QUIC-MP
+implementation <span class="bcp14">MUST</span> make sure that QUIC path validation is
+triggered when the network address of the destination changes;
+this includes IP, port and AS number. This protects against
+several attacks, see <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a> and especially
+<a href="#attack-amplification" class="auto internal xref">Section 7.2.3</a>.<a href="#section-5.1.2-1.1.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<div id="avoid-exploitation-of-skipped-path-validation">
-<section id="section-5.1.2.1">
-            <h5 id="name-avoid-exploitation-of-skipp">
-<a href="#section-5.1.2.1" class="section-number selfRef">5.1.2.1. </a><a href="#name-avoid-exploitation-of-skipp" class="section-name selfRef">Avoid Exploitation Of Skipped Path Validation</a>
-            </h5>
-<p id="section-5.1.2.1-1">In order to exploit a skipped path validation event, an attacker must
-first inject an incorrect path or SCION source address into the server.
-This can be prevented as follows:<a href="#section-5.1.2.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1.2.1-2">1) Border routers must verify that any packet whose path indicates origin
-   outside of the local AS, the underlay IP must match a known border router
-   IP.
-2) Border routers must verify that for any packet that originates in the
-   local AS, the underlay IP matches the SCION SRC IP.
-3) SCION server libraries must respond to the underlay IP from which a
-   request was received.<a href="#section-5.1.2.1-2" class="pilcrow">¶</a></p>
-<p id="section-5.1.2.1-3">These measures ensure that every packet has a correct SCION SRC IP and path.
-The only way to circumvent these checks is by spoofing the IP address in a
-local AS or by taking control over a border router of an AS along the route
-between two peers.<a href="#section-5.1.2.1-3" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="ensure-that-path-validation-is-performed">
-<section id="section-5.1.2.2">
-            <h5 id="name-ensure-that-path-validation">
-<a href="#section-5.1.2.2" class="section-number selfRef">5.1.2.2. </a><a href="#name-ensure-that-path-validation" class="section-name selfRef">Ensure That Path Validation Is Performed</a>
-            </h5>
-<p id="section-5.1.2.2-1">Implementations should ensure that path validation is triggered when
-the network address of the destination changes; this includes
-IP, port and AS number. This protects against several attacks, see
-<a href="#attack-path-injection" class="auto internal xref">Section 7.2</a> and especially <a href="#attack-amplification" class="auto internal xref">Section 7.2.2</a>.<a href="#section-5.1.2.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.1.2.2-2">There are several ways to achieve this, for example:<a href="#section-5.1.2.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.1.2-2">There are several ways to achieve this, for example:<a href="#section-5.1.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.1.2.2-3.1">
-                <p id="section-5.1.2.2-3.1.1">Adapt the QUIC-MP library to be aware of the AS number in SCION
-network addresses.<a href="#section-5.1.2.2-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-5.1.2-3.1">
+              <p id="section-5.1.2-3.1.1">Adapt the QUIC-MP library to be aware of the AS number in SCION
+network addresses.<a href="#section-5.1.2-3.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-5.1.2.2-3.2">
-                <p id="section-5.1.2.2-3.2.1">If the network address is available as a single "object",
+            <li class="normal" id="section-5.1.2-3.2">
+              <p id="section-5.1.2-3.2.1">If the network address is available as a single "object",
 the SCION layer can extend this with the AS code and the
 QUIC-MP implementation must only ensure to compare the whole
-object instead of port and IP separately.<a href="#section-5.1.2.2-3.2.1" class="pilcrow">¶</a></p>
+object instead of port and IP separately.<a href="#section-5.1.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-5.1.2.2-3.3">
-                <p id="section-5.1.2.2-3.3.1">The SCION implementation could detect cases where only the AS
+            <li class="normal" id="section-5.1.2-3.3">
+              <p id="section-5.1.2-3.3.1">The SCION implementation could detect cases where only the AS
 changes and then mangle the port or IP to trigger a path validation
 in the QUIC-MP layer. This may be a pragmatic solution but is
-discouraged because:<a href="#section-5.1.2.2-3.3.1" class="pilcrow">¶</a></p>
+discouraged because:<a href="#section-5.1.2-3.3.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.1.2.2-3.3.2.1">
-                    <p id="section-5.1.2.2-3.3.2.1.1">Managing paths in the SCION layer is not trivial because it requires
+<li class="normal" id="section-5.1.2-3.3.2.1">
+                  <p id="section-5.1.2-3.3.2.1.1">Managing paths in the SCION layer is not trivial because it requires
 synchronizing the lifecycle of SCION paths and QUIC-MP paths, e.g.,
-knowing when is a path valid or when is it closed in QUIC-MP.<a href="#section-5.1.2.2-3.3.2.1.1" class="pilcrow">¶</a></p>
+knowing when is a path valid or when is it closed in QUIC-MP.<a href="#section-5.1.2-3.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="normal" id="section-5.1.2.2-3.3.2.2">
-                    <p id="section-5.1.2.2-3.3.2.2.1">It creates opportunities for memory exhaustion attacks
-(for storing the mapping of mangled IP/port).<a href="#section-5.1.2.2-3.3.2.2.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-5.1.2-3.3.2.2">
+                  <p id="section-5.1.2-3.3.2.2.1">It creates opportunities for memory exhaustion attacks
+(for storing the mapping of mangled IP/port).<a href="#section-5.1.2-3.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="normal" id="section-5.1.2.2-3.3.2.3">
-                    <p id="section-5.1.2.2-3.3.2.3.1">It reports a wrong IP/port to the application.<a href="#section-5.1.2.2-3.3.2.3.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-5.1.2-3.3.2.3">
+                  <p id="section-5.1.2-3.3.2.3.1">It reports a wrong IP/port to the application.<a href="#section-5.1.2-3.3.2.3.1" class="pilcrow">¶</a></p>
 </li>
-                </ul>
+              </ul>
 </li>
-            </ul>
-</section>
-</div>
+          </ul>
 </section>
 </div>
 </section>
@@ -1868,7 +1851,7 @@ instances).<a href="#section-5.2-2.3.1" class="pilcrow">¶</a></p>
         </ul>
 <p id="section-5.2-3">A path change occurs when at least one of the router interfaces
 changes. The network address may stay the same.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
-<p id="section-5.2-4">With NAT rebinding, as described in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16#section-5.2" class="relref">Section 5.2</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>,
+<p id="section-5.2-4">With NAT rebinding, as described in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-5.2" class="relref">Section 5.2</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>,
 the path can change, but not without changing the SCION network
 address (IP, port, AS), so this case is not a concern.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
 <p id="section-5.2-5">Path change detection is required to trigger certain actions,
@@ -1940,7 +1923,7 @@ or closed.<a href="#section-5.2.2-1.2.1" class="pilcrow">¶</a></p>
             <li class="normal" id="section-5.2.2-1.3">
               <p id="section-5.2.2-1.3.1">Changes of the network path (while the network address stays the
 same), except for expired paths being renewed, should trigger
-algorithm reset (CC, RTT estimate), see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-5.2.2-1.3.1" class="pilcrow">¶</a></p>
+algorithm reset (CC, RTT estimate), see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-5.2.2-1.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-5.2.2-2">Analogous to <a href="#endpoint-identity" class="auto internal xref">Section 5.1</a>, except for replacing "AS" with
@@ -2034,7 +2017,7 @@ We also need to ensure this for gateways etc., see <a href="#sig" class="auto in
         <h3 id="name-congestion-control">
 <a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-congestion-control" class="section-name selfRef">Congestion Control</a>
         </h3>
-<p id="section-5.4-1">Following <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>, the CC algorithm should be reset
+<p id="section-5.4-1">Following <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>, the CC algorithm should be reset
 when the 4-tuple of a QUIC path changes. With SCION, 4-tuples are not
 sufficient to identify paths, see <a href="#pathid" class="auto internal xref">Section 5.2</a>.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
 <p id="section-5.4-2">To avoid missing a path change, the SCION implementation should never
@@ -2045,7 +2028,7 @@ implementation, see <a href="#recommendations" class="auto internal xref">Sectio
           <h4 id="name-coupled-congestion-control">
 <a href="#section-5.4.1" class="section-number selfRef">5.4.1. </a><a href="#name-coupled-congestion-control" class="section-name selfRef">Coupled Congestion Control</a>
           </h4>
-<p id="section-5.4.1-1"><span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16#section-5.3" class="relref">Section 5.3</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> mentions coupled congestion control
+<p id="section-5.4.1-1"><span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-5.3" class="relref">Section 5.3</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> mentions coupled congestion control
 algorithms, such as <span>[<a href="#CC-MULTIPATH-TCP" class="cite xref">CC-MULTIPATH-TCP</a>]</span>. <span>[<a href="#CC-MULTIPATH-TCP" class="cite xref">CC-MULTIPATH-TCP</a>]</span> states:<a href="#section-5.4.1-1" class="pilcrow">¶</a></p>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="section-5.4.1-2.1">
@@ -2100,7 +2083,7 @@ changes. This can make sense if any congestion is assumed to be on the
 network path rather than behind the remote IP/port (e.g., behind a proxy).<a href="#section-5.4.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-5.4.2-4">See also <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16#section-5.3" class="relref">Section 5.3</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-5.4.2-4" class="pilcrow">¶</a></p>
+<p id="section-5.4.2-4">See also <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-5.3" class="relref">Section 5.3</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-5.4.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="recommendations-3">
@@ -2140,7 +2123,7 @@ that share bottleneck links.<a href="#section-5.4.3-3.2.1" class="pilcrow">¶</a
 <a href="#section-5.5" class="section-number selfRef">5.5. </a><a href="#name-rtt-estimation" class="section-name selfRef">RTT Estimation</a>
         </h3>
 <p id="section-5.5-1">Similarly to congestion control, and following
-<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>, the RTT estimation algorithm should be
+<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-5.1" class="relref">Section 5.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>, the RTT estimation algorithm should be
 reset when the 4-tuple of a QUIC path changes.
 As described in <a href="#concon" class="auto internal xref">Section 5.4</a> this can be avoided
 by forbidding SCION implementations to change a network path unless
@@ -2174,7 +2157,7 @@ knowledge of a path:<a href="#section-5.5.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.5.2-3.1">
               <p id="section-5.5.2-3.1.1">An implementation may use SCION's SCMP traceroute
-(<span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-controlplane-09#section-6" class="relref">Section 6</a> of [<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>) to measure the latency of individual
+(<span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-controlplane-18#section-6" class="relref">Section 6</a> of [<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>) to measure the latency of individual
 links and then use this information to select new network paths
 that favor low latency links and avoid high latency links. See also
 <a href="#bottleneck" class="auto internal xref">Section 5.9.2</a>.<a href="#section-5.5.2-3.1.1" class="pilcrow">¶</a></p>
@@ -2197,7 +2180,7 @@ many cases be sufficient for practical use.<a href="#section-5.5.2-3.2.1" class=
 <a href="#section-5.6" class="section-number selfRef">5.6. </a><a href="#name-mtu-discovery" class="section-name selfRef">MTU Discovery</a>
         </h3>
 <p id="section-5.6-1">The MTU may be used to calculate the available payload size.
-SCION inserts an additional header (<span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-06#section-2" class="relref">Section 2</a> of [<a href="#SCION-DP" class="cite xref">SCION-DP</a>]</span>) into
+SCION inserts an additional header (<span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-15#section-2" class="relref">Section 2</a> of [<a href="#SCION-DP" class="cite xref">SCION-DP</a>]</span>) into
 each packet. The header size depends on the IP family (e.g., IPv4 vs
 IPv6 addresses) and on the "length" of the path, i.e., the number of
 ASes that are traversed. This must be taken into account when
@@ -2210,7 +2193,7 @@ However, the MTU from the path metadata can (at least on the client
 side) be used to preselect paths with desirable MTU values.<a href="#section-5.6-3" class="pilcrow">¶</a></p>
 <p id="section-5.6-4">In SCION, when an endpoint requests a network path, it will be
 provided with MTU information for every hop on a path, see also <a href="#mtu" class="auto internal xref">Section 5.6</a>
-and <span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-controlplane-09#section-4.4" class="relref">Section 4.4</a> of [<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>. However, in SCION, paths are
+and <span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-controlplane-18#section-4.4" class="relref">Section 4.4</a> of [<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>. However, in SCION, paths are
 typically only requested by client endpoints, not by server endpoints.<a href="#section-5.6-4" class="pilcrow">¶</a></p>
 <p id="section-5.6-5">There are several ways for a server to determine the MTU.
 If a server wants to know the MTU, it may:<a href="#section-5.6-5" class="pilcrow">¶</a></p>
@@ -2220,7 +2203,7 @@ If a server wants to know the MTU, it may:<a href="#section-5.6-5" class="pilcro
 </li>
           <li class="normal" id="section-5.6-6.2">
             <p id="section-5.6-6.2.1">Use an algorithm to determine the MTU, see Path MTU Discovery in
-<span><a href="https://rfc-editor.org/rfc/rfc9000#section-14.3" class="relref">Section 14.3</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16#section-5.8" class="relref">Section 5.8</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-5.6-6.2.1" class="pilcrow">¶</a></p>
+<span><a href="https://rfc-editor.org/rfc/rfc9000#section-14.3" class="relref">Section 14.3</a> of [<a href="#QUIC-TRANSPORT" class="cite xref">QUIC-TRANSPORT</a>]</span> and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-5.8" class="relref">Section 5.8</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-5.6-6.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.6-6.3">
             <p id="section-5.6-6.3.1">Try to look up the path to the client endpoint that is identical to
@@ -2252,7 +2235,7 @@ Extension, see <span><a href="https://rfc-editor.org/rfc/rfc9000#section-18" cla
         <h3 id="name-retransmission-pto">
 <a href="#section-5.7" class="section-number selfRef">5.7. </a><a href="#name-retransmission-pto" class="section-name selfRef">Retransmission &amp; PTO</a>
         </h3>
-<p id="section-5.7-1">See <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16#section-5.6" class="relref">Section 5.6</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16#section-5.7" class="relref">Section 5.7</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.
+<p id="section-5.7-1">See <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-5.6" class="relref">Section 5.6</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-5.7" class="relref">Section 5.7</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.
 For retransmission, a SCION client or server may compare available
 paths and choose one or more paths that have minimum overlap
 with the current (unreliable) path.<a href="#section-5.7-1" class="pilcrow">¶</a></p>
@@ -2263,14 +2246,14 @@ with the current (unreliable) path.<a href="#section-5.7-1" class="pilcrow">¶</
         <h3 id="name-paths-having-different-pmtu">
 <a href="#section-5.8" class="section-number selfRef">5.8. </a><a href="#name-paths-having-different-pmtu" class="section-name selfRef">Paths Having Different PMTU Sizes</a>
         </h3>
-<p id="section-5.8-1"><span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16#section-5.8" class="relref">Section 5.8</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> suggests determining a single MTU size
+<p id="section-5.8-1"><span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-5.8" class="relref">Section 5.8</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> suggests determining a single MTU size
 in order to simplify retransmission.<a href="#section-5.8-1" class="pilcrow">¶</a></p>
 <div id="key-implications-5">
 <section id="section-5.8.1">
           <h4 id="name-key-implications-6">
 <a href="#section-5.8.1" class="section-number selfRef">5.8.1. </a><a href="#name-key-implications-6" class="section-name selfRef">Key Implications</a>
           </h4>
-<p id="section-5.8.1-1"><span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16#section-5.8" class="relref">Section 5.8</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> explains that the benefit of using a
+<p id="section-5.8.1-1"><span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-5.8" class="relref">Section 5.8</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> explains that the benefit of using a
 single MTU size is
 to simplify retransmission processing, as the content of lost packets
 initially sent on one path can be sent on another path without
@@ -2333,7 +2316,7 @@ the algorithm could trigger creation of additional QUIC paths.<a href="#section-
 can help to identify links that should be avoided. In PANs,
 this can be achieved using approaches such as <span>[<a href="#UMCC" class="cite xref">UMCC</a>]</span>.<a href="#section-5.9.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.9.2-2">An alternative is to use SCION's SCMP <code>traceroute</code> command
-(<span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-controlplane-09#section-6" class="relref">Section 6</a> of [<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>)
+(<span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-controlplane-18#section-6" class="relref">Section 6</a> of [<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>)
 to measure the latency between two consecutive AS border routers.
 The measured latency can be compared to earlier measurements or to
 the latency given in the path metadata. Discrepancies can be an
@@ -2368,16 +2351,16 @@ For more details, see <span>[<a href="#SCION-CP" class="cite xref">SCION-CP</a>]
 probably requires access to the following fields and events:<a href="#section-5.9.4-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.9.4-2.1">
-              <p id="section-5.9.4-2.1.1"><code>initial_max_path_id</code> (<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16#section-2.1" class="relref">Section 2.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>)<a href="#section-5.9.4-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-5.9.4-2.1.1"><code>initial_max_path_id</code> (<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-2.1" class="relref">Section 2.1</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>)<a href="#section-5.9.4-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.9.4-2.2">
-              <p id="section-5.9.4-2.2.1">MAX_PATH_ID frames (<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16#section-4.6" class="relref">Section 4.6</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span><a href="#section-5.9.4-2.2.1" class="pilcrow">¶</a></p>
+              <p id="section-5.9.4-2.2.1">MAX_PATH_ID frames (<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-4.6" class="relref">Section 4.6</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span><a href="#section-5.9.4-2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.9.4-2.3">
-              <p id="section-5.9.4-2.3.1">PATH_AVAILABLE and PATH_BACKUP, see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16#section-3.3" class="relref">Section 3.3</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>,<a href="#section-5.9.4-2.3.1" class="pilcrow">¶</a></p>
+              <p id="section-5.9.4-2.3.1">PATH_AVAILABLE and PATH_BACKUP, see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-3.3" class="relref">Section 3.3</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>,<a href="#section-5.9.4-2.3.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.9.4-2.4">
-              <p id="section-5.9.4-2.4.1">PATH_ABANDON <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16#section-3.4" class="relref">Section 3.4</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-5.9.4-2.4.1" class="pilcrow">¶</a></p>
+              <p id="section-5.9.4-2.4.1">PATH_ABANDON <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-3.4" class="relref">Section 3.4</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-5.9.4-2.4.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-5.9.4-3">Moreover, path selection must exclude paths whose MTU is too
@@ -2393,7 +2376,7 @@ The effective MTU also depends on the length of the paths.<a href="#section-5.9.
 <a href="#section-5.10" class="section-number selfRef">5.10. </a><a href="#name-packet-scheduling" class="section-name selfRef">Packet Scheduling</a>
         </h3>
 <p id="section-5.10-1">Packet scheduling helps to distribute the transfer load efficiently
-over multiple paths, see also <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16#section-5.5" class="relref">Section 5.5</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-5.10-1" class="pilcrow">¶</a></p>
+over multiple paths, see also <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-5.5" class="relref">Section 5.5</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-5.10-1" class="pilcrow">¶</a></p>
 <div id="key-implications-7">
 <section id="section-5.10.1">
           <h4 id="name-key-implications-8">
@@ -2447,7 +2430,7 @@ meaning that it includes the ISD/AS code of a peer.<a href="#section-5.11-3" cla
         </h3>
 <p id="section-5.12-1">SCION application may use many paths. This poses two problems:
 initial path ID allocation and incremental path ID allocation.
-See also <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16#section-4.6" class="relref">Section 4.6</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16#section-4.7" class="relref">Section 4.7</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-5.12-1" class="pilcrow">¶</a></p>
+See also <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-4.6" class="relref">Section 4.6</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span> and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-4.7" class="relref">Section 4.7</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.<a href="#section-5.12-1" class="pilcrow">¶</a></p>
 <p id="section-5.12-2">When initializing a connection, servers and clients should be careful to
 set the maximum path ID high enough to allow as many paths as an application
 may need, e.g., through the initial_max_path_id transport parameter or the
@@ -2493,6 +2476,63 @@ additional path IDs.<a href="#section-5.12.2-1.3.1" class="pilcrow">¶</a></p>
 </div>
 </section>
 </div>
+<div id="address-spoofing">
+<section id="section-5.13">
+        <h3 id="name-address-spoofing">
+<a href="#section-5.13" class="section-number selfRef">5.13. </a><a href="#name-address-spoofing" class="section-name selfRef">Address Spoofing</a>
+        </h3>
+<p id="section-5.13-1">Attackers may create and send packets that look like they originate
+from somewhere else. There are two main scenarios:<a href="#section-5.13-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-5.13-2">
+<li id="section-5.13-2.1">
+            <p id="section-5.13-2.1.1">An attacker creates a packet with a path that seems to originate
+outside the local AS.<a href="#section-5.13-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-5.13-2.2">
+            <p id="section-5.13-2.2.1">An attacker creates a packet that seems to originate from the
+local AS but the SCION SRC address does not match the attackers IP.<a href="#section-5.13-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ol>
+<p id="section-5.13-3">In both cases the packet may be sent a border router or a local
+endpoint.<a href="#section-5.13-3" class="pilcrow">¶</a></p>
+<div id="key-implications-9">
+<section id="section-5.13.1">
+          <h4 id="name-key-implications-10">
+<a href="#section-5.13.1" class="section-number selfRef">5.13.1. </a><a href="#name-key-implications-10" class="section-name selfRef">Key Implications</a>
+          </h4>
+<p id="section-5.13.1-1"><span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-15#section-4.2.2.2" class="relref">Section 4.2.2.2</a> of [<a href="#SCION-DP" class="cite xref">SCION-DP</a>]</span> states: "If the packet path
+indicates an origin outside of the local AS, verify that the packet
+underlay source address matches a known border router in the local AS."<a href="#section-5.13.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.13.1-2">For the 2nd scenario, and for the sending to local endpoints, there are
+no known attacks.<a href="#section-5.13.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="recommendations-9">
+<section id="section-5.13.2">
+          <h4 id="name-recommendations-10">
+<a href="#section-5.13.2" class="section-number selfRef">5.13.2. </a><a href="#name-recommendations-10" class="section-name selfRef">Recommendations</a>
+          </h4>
+<p id="section-5.13.2-1">There are no known attacks. However, ASes should try to avoid
+exporting faulty packets and endhosts SCION stacks should avoid
+forwarding faulty packets to the QUIC layer or application layer.<a href="#section-5.13.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.13.2-2">The recommendation is that receivers (endhost SCION stacks, border
+routers, ...) should drop any packets:<a href="#section-5.13.2-2" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-5.13.2-3">
+<li id="section-5.13.2-3.1">
+              <p id="section-5.13.2-3.1.1">Receivers should drop a packet if its path indicates origin outside
+the local AS but the underlay IP does not match a known
+border router IP.<a href="#section-5.13.2-3.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li id="section-5.13.2-3.2">
+              <p id="section-5.13.2-3.2.1">Receivers should drop a packet if its path indicates origin inside
+the local AS but the underlay IP does not match the SCION SRC
+address.<a href="#section-5.13.2-3.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ol>
+</section>
+</div>
+</section>
+</div>
 </section>
 </div>
 <div id="all-recommendations">
@@ -2515,7 +2555,7 @@ implementation <span class="bcp14">MUST</span> ensure to trigger path validation
 network address of the destination changes; this includes
 IP, port and AS number. This protects against several attacks,
 see <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a> and especially
-<a href="#attack-amplification" class="auto internal xref">Section 7.2.2</a>.<a href="#section-6.1-1.1.1" class="pilcrow">¶</a></p>
+<a href="#attack-amplification" class="auto internal xref">Section 7.2.3</a>.<a href="#section-6.1-1.1.1" class="pilcrow">¶</a></p>
 <p id="section-6.1-1.1.2">
 There are several ways to achieve this, for example:<a href="#section-6.1-1.1.2" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -2557,15 +2597,15 @@ path changes beyond 4-tuple or AS changes. This enables resetting
 congestion control and RTT algorithms.<a href="#section-6.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.1-1.3">
-            <p id="section-6.1-1.3.1">A QUIC-MP implementation, especially congestion control, RTT estimation,
-and path selection algorithms should be careful to not accept or probe
-all available SCION network paths. There may be a large number of path
-available and probing or using them all may amount to a denial of service
-attack on the receiver.<a href="#section-6.1-1.3.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-1.3.1">A QUIC-MP implementation, especially congestion control, RTT
+estimation, and path selection algorithms should be careful to not
+accept or probe all available SCION network paths. There may be a
+large number of path available and probing or using them all may
+amount to a denial of service attack on the receiver.<a href="#section-6.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.1-1.4">
-            <p id="section-6.1-1.4.1">To prevent problems with path ID exhaustion with multi-path applications,
-see <a href="#path-id-allocation" class="auto internal xref">Section 5.12</a>:<a href="#section-6.1-1.4.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-1.4.1">To prevent problems with path ID exhaustion with multi-path
+applications, see <a href="#path-id-allocation" class="auto internal xref">Section 5.12</a>:<a href="#section-6.1-1.4.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.1-1.4.2.1">
                 <p id="section-6.1-1.4.2.1.1">Servers and clients should initialize the connection with
@@ -2591,39 +2631,52 @@ actually exhausted.<a href="#section-6.1-1.4.2.3.1" class="pilcrow">¶</a></p>
         </h3>
 <ul class="normal">
 <li class="normal" id="section-6.2-1.1">
-            <p id="section-6.2-1.1.1">SCION implementations can prevent attackers from expoloiting a skipped
-path validation by preventing path injection (<a href="#attack-path-injection" class="auto internal xref">Section 7.2</a>).
-To prevent path injection:<a href="#section-6.2-1.1.1" class="pilcrow">¶</a></p>
-<p id="section-6.2-1.1.2">
-1) Border routers <span class="bcp14">MUST</span> verify that any packet whose path indicates origin
-   outside of the local AS, the underlay IP must match a known border router
-   IP.
-2) Border routers <span class="bcp14">MUST</span> verify that for any packet that originates in the
-   local AS, the underlay IP matches the SCION SRC IP.
-3) SCION server libraries <span class="bcp14">MUST</span> respond to the underlay IP from which a
-   request was received.<a href="#section-6.2-1.1.2" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-6.2-1.2">
-            <p id="section-6.2-1.2.1">A SCION implementation <span class="bcp14">SHOULD NOT</span> store or cache paths,
+            <p id="section-6.2-1.1.1">A SCION implementation <span class="bcp14">SHOULD NOT</span> store or cache paths,
 especially not on the server side. This prevents memory
 exhaustion attacks, see {attack-memory-exhaustion}.
 This also avoids the problem of path lifecycle maintenance, i.e.,
 determining which paths are still alive and which have been closed
 or abandoned.
 Sometimes, storing paths is inevitable, see <a href="#sig" class="auto internal xref">Section 4.6</a>.
-For security concerns, see also <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a>.<a href="#section-6.2-1.2.1" class="pilcrow">¶</a></p>
+For security concerns, see also <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a>.<a href="#section-6.2-1.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.2-1.2">
+            <p id="section-6.2-1.2.1">If a SCION implementation stores paths internally, it <span class="bcp14">MUST NOT</span>
+use IP/port as key to look up paths. IP/port are not unique
+to identify endpoints.<a href="#section-6.2-1.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.2-1.3">
-            <p id="section-6.2-1.3.1">If a SCION implementation stores paths internally, it must be careful
-to avoid using IP/port as key to look up paths. IP/port are not unique
-to identify endpoints.<a href="#section-6.2-1.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-6.2-1.4">
-            <p id="section-6.2-1.4.1">When used with QUIC-MP, a SCION implementation <span class="bcp14">MUST NOT</span> change the
+            <p id="section-6.2-1.3.1">When used with QUIC-MP, a SCION implementation <span class="bcp14">MUST NOT</span> change the
 network paths, possibly with the exception of refreshing expired
 paths.
 When a path stops working, the implementation should instead report
-an error to the QUIC(-MP) layer or time out silently.<a href="#section-6.2-1.4.1" class="pilcrow">¶</a></p>
+an error to the QUIC(-MP) layer or time out silently.<a href="#section-6.2-1.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.2-1.4">
+            <p id="section-6.2-1.4.1">Attackers may create packste with faulty spoofed addresses or
+paths. While there is no known associated attack, border routers
+should not forward faulty packets to other ASes and endhost SCION
+libraries should not forward faulty packets to the QUIC layer or
+applications.<a href="#section-6.2-1.4.1" class="pilcrow">¶</a></p>
+<p id="section-6.2-1.4.2">
+To prevent this, packets receivers, such as border routers or
+SCION endhost libraries, should drop faulty packets.<a href="#section-6.2-1.4.2" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-6.2-1.4.3">
+<li id="section-6.2-1.4.3.1">
+                <p id="section-6.2-1.4.3.1.1">Receivers <span class="bcp14">MAY</span> drop a packet if its path indicates origin outside
+the local AS but the underlay IP does not match a known
+border router IP.<a href="#section-6.2-1.4.3.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-6.2-1.4.3.2">
+                <p id="section-6.2-1.4.3.2.1">Receivers <span class="bcp14">MAY</span> drop a packet if its path indicates origin inside
+the local AS but the underlay IP does not match the SCION SRC
+address.<a href="#section-6.2-1.4.3.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ol>
+<p id="section-6.2-1.4.4">
+NB: 1. The check for packets that seeminlgy originate outside the
+local AS is already specified for border routers in
+<span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-15#section-4.2.2.2" class="relref">Section 4.2.2.2</a> of [<a href="#SCION-DP" class="cite xref">SCION-DP</a>]</span>.<a href="#section-6.2-1.4.4" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -2677,8 +2730,8 @@ part of QUIC-MP.<a href="#section-6.3-1.3.1" class="pilcrow">¶</a></p>
         </h3>
 <ul class="normal">
 <li class="normal" id="section-6.4-1.1">
-            <p id="section-6.4-1.1.1">Servers and client should aim to be located in respective local networks
-(local ASes) that have protection against IP spoofing from machines in the
+            <p id="section-6.4-1.1.1">Endpoints should aim to be located in local networks (local ASes)
+that have protection against IP spoofing from machines in the
 same network, see <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a>.<a href="#section-6.4-1.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
@@ -2710,25 +2763,29 @@ implementation changes and additional consideration regarding:<a href="#section-
         <h3 id="name-ip-ambiguity">
 <a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-ip-ambiguity" class="section-name selfRef">IP Ambiguity</a>
         </h3>
-<p id="section-7.1-1">In SCION, IP addresses are not sufficient to uniquely identify a peer endpoint.
-ASes are free to use IP addresses from "private" IP ranges.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
-<p id="section-7.1-2">To attack a client with IP address X, an attacker could set up an endpoint
-with identical IP X in a different AS. The attacker can then contact a server
-endpoint that is also used by the client victim.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
-<p id="section-7.1-3">If the server endpoint stores path internally with IP addresses as keys,
-then this would result in a key collision, which can cause two types of problems:<a href="#section-7.1-3" class="pilcrow">¶</a></p>
+<p id="section-7.1-1">In SCION, ASes are free to use IP addresses from "private" IP ranges.
+THerfore, IP addresses do not uniquely identify a peer endpoint.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1-2">To attack a client with IP address X, an attacker could set up an
+endpoint with identical IP X in a different AS. The attacker can
+then contact a server endpoint that is also used by the client victim.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.1-3">If the server endpoint stores paths internally with IP addresses as
+keys, then this would result in a key collision, which can cause two
+types of problems:<a href="#section-7.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.1-4.1">
-            <p id="section-7.1-4.1.1">If the attacker contacts the server after the client, the contact may result
-in overwriting the existing entry (of the victim).<a href="#section-7.1-4.1.1" class="pilcrow">¶</a></p>
+            <p id="section-7.1-4.1.1">If the attacker contacts the server after the client, the contact
+may result in overwriting the existing entry that points to the
+victim.<a href="#section-7.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-7.1-4.2">
-            <p id="section-7.1-4.2.1">If overwriting is prevented, the attacker may contact the server before the victim,
-thus potentially preventing the victim from establishing a connection,<a href="#section-7.1-4.2.1" class="pilcrow">¶</a></p>
+            <p id="section-7.1-4.2.1">If overwriting is prevented, the attacker may contact the server
+before the victim, thus potentially preventing the victim from
+establishing a connection.<a href="#section-7.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-7.1-5">The second case is more difficult to achieve. Often, connections may be store by
-IP+port, so the attacker must guess the victims port when launching the attack.<a href="#section-7.1-5" class="pilcrow">¶</a></p>
+<p id="section-7.1-5">The second case is more difficult to achieve. Often, connections may
+be stored by IP+port, so the attacker must guess the victims port
+when launching the attack, this is difficult with ephemeral ports.<a href="#section-7.1-5" class="pilcrow">¶</a></p>
 <div id="mitigation">
 <section id="section-7.1.1">
           <h4 id="name-mitigation">
@@ -2738,22 +2795,22 @@ IP+port, so the attacker must guess the victims port when launching the attack.<
 <li class="normal" id="section-7.1.1-1.1">
               <p id="section-7.1.1-1.1.1">A SCION implementation should avoid storing paths while using
 the IP address as key to look up paths.
-For QUIC-MP, the best solution is to use the QUIC Path ID as key.<a href="#section-7.1.1-1.1.1" class="pilcrow">¶</a></p>
+For QUIC-MP, the QUIC Path ID should be used as key.<a href="#section-7.1.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-7.1.1-1.2">
-              <p id="section-7.1.1-1.2.1">SCION libraries could us port/IP mangling when they detect multiple paths with
-the same IP/port. However, this may have unintended consequences in the
-application layer.<a href="#section-7.1.1-1.2.1" class="pilcrow">¶</a></p>
+              <p id="section-7.1.1-1.2.1">SCION libraries could use IP/port mangling when they detect
+multiple paths with the same IP/port. However, this may have
+unintended consequences in the application layer.<a href="#section-7.1.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-7.1.1-1.3">
-              <p id="section-7.1.1-1.3.1">Higher level libraries, such as QUIC(-MP) should be carefuol to not
+              <p id="section-7.1.1-1.3.1">Higher level libraries, such as QUIC(-MP) should be careful to not
 rely only on IP addresses to trigger path validation or resetting
-congestion control or RTT estimation algorithms. Instead, QUIC-MP should
-rely on the QUIC Path ID.<a href="#section-7.1.1-1.3.1" class="pilcrow">¶</a></p>
+congestion control or RTT estimation algorithms. Instead, QUIC-MP
+should rely on the QUIC Path ID.<a href="#section-7.1.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-7.1.1-2">Circumventing path validation is not possible, because that would require injecting
-a new path, see <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a>.<a href="#section-7.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.1.1-2">Circumventing path validation is not possible, because that would
+require injecting a new path, see <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a>.<a href="#section-7.1.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2763,66 +2820,74 @@ a new path, see <a href="#attack-path-injection" class="auto internal xref">Sect
         <h3 id="name-path-injection">
 <a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-path-injection" class="section-name selfRef">Path Injection</a>
         </h3>
-<p id="section-7.2-1">There are several potential attacks that are based on injecting
-valid or invalid paths into the server-side software stack.
-Injecting a path means sending a packet with an incorrect path to an endpoint
-such that the endpoint sends a response along that path. The path is incorrect
-insofar as it does not accurately describe the route of the original request packet.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-1">There are several potential attacks that build on injecting
+valid or invalid paths into the server-side software stack.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
 <p id="section-7.2-2">In summary, these attacks can be prevented by the recommendations
-listed in <a href="#all-recommendations" class="auto internal xref">Section 6</a>. The following scenarios are considered:<a href="#section-7.2-2" class="pilcrow">¶</a></p>
+listed in <a href="#all-recommendations" class="auto internal xref">Section 6</a>, specifically we
+recommend the following where possible:<a href="#section-7.2-2" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-7.2-3">
 <li id="section-7.2-3.1">
-            <p id="section-7.2-3.1.1">The SCION SRC address is wrong. I.e., the packet originates in the correct AS
-but from a different IP than what is announced in the SCION SRC address field.<a href="#section-7.2-3.1.1" class="pilcrow">¶</a></p>
-<p id="section-7.2-3.1.2">
-To avoid this, border routers <span class="bcp14">MUST</span> drop egress packets whose path indicates
-a local origin, but whose SCION SRC address does not match the underlay
-SRC address.<a href="#section-7.2-3.1.2" class="pilcrow">¶</a></p>
+            <p id="section-7.2-3.1.1">SCION layers should avoid storing/caching paths and network addresses
+(beyond IP/port) internally.
+Instead, they should be given to the QUIC(-MP) layer or the
+application layer. That means that path information would only be
+accepted and retained if the QUIC(-MP) or application layer decides
+to do so.<a href="#section-7.2-3.1.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-7.2-3.2">
-            <p id="section-7.2-3.2.1">The path is too long. The packet originates in an AS that is different from the
-first AS announced in the path.<a href="#section-7.2-3.2.1" class="pilcrow">¶</a></p>
-<p id="section-7.2-3.2.2">
-To avoid this, a border router <span class="bcp14">MUST</span> drop egress packets whose paths indicate
-AS-external origin but whose underlay address does not
-match that of a known border router.<a href="#section-7.2-3.2.2" class="pilcrow">¶</a></p>
-</li>
-          <li id="section-7.2-3.3">
-            <p id="section-7.2-3.3.1">The path is not empty. This is an extreme case of the previous example. The
-packet originates in the destination AS and is sent directly to the endpoint.
-In this case the path should be empty.<a href="#section-7.2-3.3.1" class="pilcrow">¶</a></p>
-<p id="section-7.2-3.3.2">
-To avoid this, on a server, the SCION layer <span class="bcp14">MUST</span> always respond to the same
-underlay address from which a request was received.
-This is anyway useful for servers because responding to the same address also
-avoids the need for the server to look up the first hop when sending a response.<a href="#section-7.2-3.3.2" class="pilcrow">¶</a></p>
+            <p id="section-7.2-3.2.1">SCION layers and QUIC(-MP) layers should interface by using
+network addresses that include all information that identifies an
+endpoint, including, for example, AS code. Any change in a
+network address (including the AS code) should trigger path
+validation.<a href="#section-7.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
-<p id="section-7.2-4">An attacker can inject paths into a server only in the following circumstances:
-- The attacker controls the border routers of an AS that is between a victim and
-  a server.
-- The attacker can spoof the address of a border router in an AS that is between
-  the victim and a server.
-- The attacker can spoof the address of a victim while being located inside the
-  victims AS.<a href="#section-7.2-4" class="pilcrow">¶</a></p>
-<div id="traffic-redirection-over-different-path">
+<p id="section-7.2-4">Examples of attacks include memory exhaustion attacks, traffic
+redirection attacks, and traffic amplification attacks.<a href="#section-7.2-4" class="pilcrow">¶</a></p>
+<div id="traffic-redirection-to-different-as">
 <section id="section-7.2.1">
-          <h4 id="name-traffic-redirection-over-di">
-<a href="#section-7.2.1" class="section-number selfRef">7.2.1. </a><a href="#name-traffic-redirection-over-di" class="section-name selfRef">Traffic Redirection over Different Path</a>
+          <h4 id="name-traffic-redirection-to-diff">
+<a href="#section-7.2.1" class="section-number selfRef">7.2.1. </a><a href="#name-traffic-redirection-to-diff" class="section-name selfRef">Traffic Redirection to Different AS</a>
           </h4>
-<p id="section-7.2.1-1">An attacker may craft a path with a network address that is identical
-to an existing valid endpoint, but with a different path.<a href="#section-7.2.1-1" class="pilcrow">¶</a></p>
-<p id="section-7.2.1-2">The new route may be invalid (e.g., contain nonexistent links)
+<p id="section-7.2.1-1">An attacker may craft a packet that appears to originate from the same
+IP/port, but is located in a different AS than an existing connection.
+If the server's SCION layer stores paths internally, and uses IP/port
+as key to look them up, then the new paths may replace the existing one,
+and outgoing traffic is redirected to the new paths and destination.<a href="#section-7.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.2.1-2">Mitigation:<a href="#section-7.2.1-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.2.1-3.1">
+              <p id="section-7.2.1-3.1.1">The QUIC(-MP) layer <span class="bcp14">MUST</span> trigger path validation if the
+network address changes, and must consider every attribute of the
+address, not just IP and port.<a href="#section-7.2.1-3.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-7.2.1-3.2">
+              <p id="section-7.2.1-3.2.1">If a packet is rejected by the QUIC(-MP) layer, the SCION layer <span class="bcp14">MUST NOT</span> add it to any local state (including not replacing existing
+state).
+This can be achieved trivially by not having state in the SCION layer.<a href="#section-7.2.1-3.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</section>
+</div>
+<div id="traffic-redirection-over-different-path">
+<section id="section-7.2.2">
+          <h4 id="name-traffic-redirection-over-di">
+<a href="#section-7.2.2" class="section-number selfRef">7.2.2. </a><a href="#name-traffic-redirection-over-di" class="section-name selfRef">Traffic Redirection over Different Path</a>
+          </h4>
+<p id="section-7.2.2-1">An attacker may craft a path with a network address that is identical
+to an existing valid endpoint, but with a different path.<a href="#section-7.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2.2-2">The new route may be invalid (e.g., contain nonexistent links)
 or faulty (contain links that are broken or have high latency
-or drop rate).<a href="#section-7.2.1-2" class="pilcrow">¶</a></p>
-<p id="section-7.2.1-3">The new route may also work fine, but violate the client's path policy
-or be used for traffic analysis.<a href="#section-7.2.1-3" class="pilcrow">¶</a></p>
-<p id="section-7.2.1-4">The attacker injects the crafted path into the server, with the intent that the
-non-unique IP causes an existing path/connection mapping to be overwritten, and
-thus replace the victims path with the updated path.<a href="#section-7.2.1-4" class="pilcrow">¶</a></p>
+or drop rate).<a href="#section-7.2.2-2" class="pilcrow">¶</a></p>
+<p id="section-7.2.2-3">The new route may also work fine, but violate the client's path policy
+or be used for traffic analysis.<a href="#section-7.2.2-3" class="pilcrow">¶</a></p>
+<p id="section-7.2.2-4">The attacker injects the crafted path into the server, with the
+intention that the non-unique IP causes an existing path/connection
+mapping to be overwritten, and thus replace the victims path with
+the updated path.<a href="#section-7.2.2-4" class="pilcrow">¶</a></p>
 <span id="name-example-of-non-unique-ips"></span><div id="fig-example-non-unique-ip">
 <figure id="figure-1">
-            <div class="alignLeft art-text artwork" id="section-7.2.1-5.1">
+            <div class="alignLeft art-text artwork" id="section-7.2.2-5.1">
 <pre>
      AS #100               AS #200                   AS #300
   +-----------------+        +--------------+        +--------------+
@@ -2837,73 +2902,96 @@ thus replace the victims path with the updated path.<a href="#section-7.2.1-4" c
 <a href="#name-example-of-non-unique-ips" class="selfRef">Example of non-unique IPs</a>
             </figcaption></figure>
 </div>
-<p id="section-7.2.1-6">Mitigation:<a href="#section-7.2.1-6" class="pilcrow">¶</a></p>
-<p id="section-7.2.1-7">This attack requires either spoofing of the client's IP address
+<p id="section-7.2.2-6">This attack requires either spoofing of the client's IP address
 (when the attacker is in the same AS as the client),
 spoofing of a border router's IP address (when the attacker
 is in the server's AS), or injection of a path (which requires
-control over an AS that is en-route between the client and server).<a href="#section-7.2.1-7" class="pilcrow">¶</a></p>
-<p id="section-7.2.1-8">This can be further mitigated by the recommendation that path validation
-should always be triggered when the network address or path
-changes, even if the 4-tuple stays the same.<a href="#section-7.2.1-8" class="pilcrow">¶</a></p>
+control over an AS that is en-route between the client and server).<a href="#section-7.2.2-6" class="pilcrow">¶</a></p>
+<p id="section-7.2.2-7">Mitigation:<a href="#section-7.2.2-7" class="pilcrow">¶</a></p>
+<p id="section-7.2.2-8">From the recommendations:<a href="#section-7.2.2-8" class="pilcrow">¶</a></p>
+<p id="section-7.2.2-9">1) SCION implementations <span class="bcp14">SHOULD NOT</span> store or cache paths,
+     especially not on the server side.
+  2) SCION endhost implementations <span class="bcp14">MUST</span> not use IP/port as key to
+     store paths or connections to peers.<a href="#section-7.2.2-9" class="pilcrow">¶</a></p>
+<p id="section-7.2.2-10">Both recommendations prevent the attack.
+Further mitigation comes from the recommendation that path validation
+<span class="bcp14">MUST</span> always be triggered when the network address or path
+changes, even if the 4-tuple stays the same.<a href="#section-7.2.2-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="attack-amplification">
-<section id="section-7.2.2">
+<section id="section-7.2.3">
           <h4 id="name-traffic-amplification">
-<a href="#section-7.2.2" class="section-number selfRef">7.2.2. </a><a href="#name-traffic-amplification" class="section-name selfRef">Traffic Amplification</a>
+<a href="#section-7.2.3" class="section-number selfRef">7.2.3. </a><a href="#name-traffic-amplification" class="section-name selfRef">Traffic Amplification</a>
           </h4>
-<p id="section-7.2.2-1">An attacker may establish a connection with a server,
+<p id="section-7.2.3-1">An attacker may establish a connection with a server,
 request a large amount of data, and then inject a path that
-redirects to a victim that has the same IP/port, but in a different AS.<a href="#section-7.2.2-1" class="pilcrow">¶</a></p>
-<p id="section-7.2.2-2">If the server-side QUIC-MP does not trigger path validation
+redirects to a victim that has the same IP/port, but in a different AS.<a href="#section-7.2.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.2.3-2">If the server-side QUIC-MP does not trigger path validation
 (because IP/port are the same), then it may implicitly accept
-the new path and send the requested data to a victim.<a href="#section-7.2.2-2" class="pilcrow">¶</a></p>
-<p id="section-7.2.2-3">Mitigation:<a href="#section-7.2.2-3" class="pilcrow">¶</a></p>
-<p id="section-7.2.2-4">This attack requires either spoofing of the client's IP address
-(when the attacker is in the same AS as the client),
-spoofing of a border router's IP address (when the attacker
-is in the server's AS), or injection of a path (which requires
-control over an AS that is en-route between the client and server).
-- A QUIC(-MP) library must consider all attributes
-  (not just the 4-tuple) when checking for a change in the network
-  address. This would then trigger path validation, and the attack
-  can be averted.
-- If a QUIC(-MP) library cannot compare additional attributes
-  (e.g., legacy library), the SCION layer (server side) should have an
-  option to perform port mangling or IP mangling: when the SCION layer
-  detects a new network address that differs only in the AS number
-  from a previously seen address (IP/port are the same), then it
-  should perform IP/port mangling, i.e., reporting a modified IP or
-  port to the QUIC(-MP) layer. This new IP/port would trigger a path
-  validation or algorithm reset where required.<a href="#section-7.2.2-4" class="pilcrow">¶</a></p>
-<p id="section-7.2.2-5">Caveats:<a href="#section-7.2.2-5" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-7.2.2-6.1">
-              <p id="section-7.2.2-6.1.1">Offering a mangled IP/port to the application may have implications
-for application correctness, such as displaying an unexpected IP/port.<a href="#section-7.2.2-6.1.1" class="pilcrow">¶</a></p>
-</li>
-          </ul>
+the new path and send the requested data to a victim.<a href="#section-7.2.3-2" class="pilcrow">¶</a></p>
+<p id="section-7.2.3-3">Since injecting a path from on an-path AS is hard (requires control
+of an AS), the attacker will need two hosts.<a href="#section-7.2.3-3" class="pilcrow">¶</a></p>
+<p id="section-7.2.3-4">1) Host A1 is located in an on-path AS or the server AS. A1
+     uses the victims IP to initiate a handshake with the server.
+  2) Host A2 is located in the victims AS. A2 use the secret
+     obtained by A1 to request data from the server. A2 must be in the
+     victim's AS so it can use the same path as the victim. In the GET
+     request, it sets the SCION SRC address to be the victim's IP.<a href="#section-7.2.3-4" class="pilcrow">¶</a></p>
+<p id="section-7.2.3-5">If IP spoofing is possible in AS #200 and if border routers and
+endpoints are on the same network in AS #200, then A2 is not
+required. Instead, A1 could send the GET request with a spoofed IP
+of the borderrouter that connects #200 to #300.<a href="#section-7.2.3-5" class="pilcrow">¶</a></p>
 <span id="name-example-of-traffic-amplific"></span><div id="fig-example-new-path">
 <figure id="figure-2">
-            <div class="alignLeft art-text artwork" id="section-7.2.2-7.1">
+            <div class="alignLeft art-text artwork" id="section-7.2.3-6.1">
 <pre>
-   Attacker                                                Server
+   Attacker A1                                               Server
    (Establish connection)
+   QUIC=Init,Hello
+   IP Address=victim-IP
+   SCION Address=#200,victim-IP
    Path=[#200, #100] --&gt;
+                                             QUIC=Init,Hello,Cert,FIN
                                                 &lt;-- Path=[#100, #200]
 
-   (Change Path)
+   Attacker A2
+   (Request data)
+   QUIC=FIN,GET
+   IP Address=spoofed victim-IP
+   SCION Address=#300,victim-IP
    Path=[#300, #200, #100] --&gt;
+                                                            QUIC=Data
                                           &lt;-- Path=[#100, #200, #300]
 
    Client: receives unwanted traffic
 </pre>
 </div>
 <figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
-<a href="#name-example-of-traffic-amplific" class="selfRef">Example of traffic amplification attack</a>
+<a href="#name-example-of-traffic-amplific" class="selfRef">Example of traffic amplification attack. #100 is the server AS, #200 is the attacker A1's AS and #300 is the victim's AS.</a>
             </figcaption></figure>
 </div>
+<p id="section-7.2.3-7">Mitigation:<a href="#section-7.2.3-7" class="pilcrow">¶</a></p>
+<p id="section-7.2.3-8">This attack requires spoofing of the victim's IP address.
+- A QUIC(-MP) library must consider all attributes
+  (not just the 4-tuple) when checking for a change in the network
+  address. This would then trigger path validation, and the attack
+  can be averted.
+- If a QUIC(-MP) library cannot compare additional attributes
+  (e.g., legacy library), the SCION layer (server side) may have an
+  option to perform port mangling or IP mangling: when the SCION layer
+  detects a new network address that differs only in the AS number
+  from a previously seen address (IP/port are the same), then it
+  should perform IP/port mangling, i.e., reporting a modified IP or
+  port to the QUIC(-MP) layer. This new IP/port would trigger a path
+  validation or algorithm reset where required.<a href="#section-7.2.3-8" class="pilcrow">¶</a></p>
+<p id="section-7.2.3-9">Caveats:<a href="#section-7.2.3-9" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.2.3-10.1">
+              <p id="section-7.2.3-10.1.1">Offering a mangled IP/port to the application may have implications
+for application correctness, such as displaying an unexpected IP/port.<a href="#section-7.2.3-10.1.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
 </section>
 </div>
 </section>
@@ -2928,13 +3016,13 @@ closes the path, abandons the path, or rejects a packet with a new path.<a href=
 <a href="#section-7.4" class="section-number selfRef">7.4. </a><a href="#name-number-of-open-paths" class="section-name selfRef">Number of Open Paths</a>
         </h3>
 <p id="section-7.4-1">The number of open paths should be limited, see
-<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16#section-7.2" class="relref">Section 7.2</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.
+<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-7.2" class="relref">Section 7.2</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>.
 This is important in the context of applications that may open many
 paths in parallel.<a href="#section-7.4-1" class="pilcrow">¶</a></p>
 <p id="section-7.4-2">Mitigation:<a href="#section-7.4-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.4-3.1">
-            <p id="section-7.4-3.1.1">Same as <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16#section-7.2" class="relref">Section 7.2</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>: endpoints
+            <p id="section-7.4-3.1.1">Same as <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21#section-7.2" class="relref">Section 7.2</a> of [<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>: endpoints
  need to limit the maximum number of paths and might consider
  additional measures to limit the number of concurrent path validation
  processes, e.g., by pacing them out or limiting the number of path
@@ -2972,7 +3060,7 @@ not en-block but time-shifted.<a href="#section-7.5-4" class="pilcrow">¶</a></p
             <p id="section-7.6-2.1.1">Use multipathing for anonymity, see <a href="#categories" class="auto internal xref">Section 4</a>.<a href="#section-7.6-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-7.6-2.2">
-            <p id="section-7.6-2.2.1">See other attacks in <span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-controlplane-09#section-7.2.4" class="relref">Section 7.2.4</a> of [<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>?<a href="#section-7.6-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-7.6-2.2.1">See other attacks in <span><a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-controlplane-18#section-7.2.4" class="relref">Section 7.2.4</a> of [<a href="#SCION-CP" class="cite xref">SCION-CP</a>]</span>?<a href="#section-7.6-2.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -3069,19 +3157,19 @@ not en-block but time-shifted.<a href="#section-7.5-4" class="pilcrow">¶</a></p
 <dd class="break"></dd>
 <dt id="QUIC-ACKFREQUENCY">[QUIC-ACKFREQUENCY]</dt>
         <dd>
-<span class="refAuthor">Iyengar, J.</span>, <span class="refAuthor">Swett, I.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"QUIC Acknowledgment Frequency"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-quic-ack-frequency-11</span>, <time datetime="2025-02-28" class="refDate">28 February 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-ack-frequency-11">https://datatracker.ietf.org/doc/html/draft-ietf-quic-ack-frequency-11</a>&gt;</span>. </dd>
+<span class="refAuthor">Iyengar, J.</span>, <span class="refAuthor">Swett, I.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"QUIC Acknowledgment Frequency"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-quic-ack-frequency-14</span>, <time datetime="2026-02-05" class="refDate">5 February 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-ack-frequency-14">https://datatracker.ietf.org/doc/html/draft-ietf-quic-ack-frequency-14</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="QUIC-MP">[QUIC-MP]</dt>
         <dd>
-<span class="refAuthor">Liu, Y.</span>, <span class="refAuthor">Ma, Y.</span>, <span class="refAuthor">De Coninck, Q.</span>, <span class="refAuthor">Bonaventure, O.</span>, <span class="refAuthor">Huitema, C.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"Multipath Extension for QUIC"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-quic-multipath-16</span>, <time datetime="2025-08-21" class="refDate">21 August 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16">https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16</a>&gt;</span>. </dd>
+<span class="refAuthor">Liu, Y.</span>, <span class="refAuthor">Ma, Y.</span>, <span class="refAuthor">De Coninck, Q.</span>, <span class="refAuthor">Bonaventure, O.</span>, <span class="refAuthor">Huitema, C.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"Managing multiple paths for a QUIC connection"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-quic-multipath-21</span>, <time datetime="2026-03-17" class="refDate">17 March 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21">https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="SCION-CP">[SCION-CP]</dt>
         <dd>
-<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Control Plane"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dekater-scion-controlplane-09</span>, <time datetime="2025-07-07" class="refDate">7 July 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-controlplane-09">https://datatracker.ietf.org/doc/html/draft-dekater-scion-controlplane-09</a>&gt;</span>. </dd>
+<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Control Plane"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dekater-scion-controlplane-18</span>, <time datetime="2026-04-30" class="refDate">30 April 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-controlplane-18">https://datatracker.ietf.org/doc/html/draft-dekater-scion-controlplane-18</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="SCION-DP">[SCION-DP]</dt>
         <dd>
-<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, <span class="refAuthor">Hugly, J.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Data Plane"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dekater-scion-dataplane-06</span>, <time datetime="2025-07-07" class="refDate">7 July 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-06">https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-06</a>&gt;</span>. </dd>
+<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, <span class="refAuthor">Hugly, J.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Data Plane"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dekater-scion-dataplane-15</span>, <time datetime="2026-06-24" class="refDate">24 June 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-15">https://datatracker.ietf.org/doc/html/draft-dekater-scion-dataplane-15</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="UMCC">[UMCC]</dt>
       <dd>
@@ -3108,7 +3196,8 @@ on several iterations of this document.<a href="#appendix-A-1" class="pilcrow">�
       <h2 id="name-change-log">
 <a href="#name-change-log" class="section-name selfRef">Change Log</a>
       </h2>
-<p id="appendix-B-1">Changes made to drafts since initial submission. This section is to be removed before publication.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+<p id="appendix-B-1">Changes made to drafts since initial submission. This section is to
+be removed before publication.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
 <div id="draft-zaeschke-scion-quic-multipath-01">
 <section id="appendix-B.1">
         <h3 id="name-draft-zaeschke-scion-quic-m">
@@ -3117,21 +3206,32 @@ on several iterations of this document.<a href="#appendix-A-1" class="pilcrow">�
 <p id="appendix-B.1-1">Major changes:<a href="#appendix-B.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B.1-2.1">
-            <p id="appendix-B.1-2.1.1">"Path Injection": clarify that path injection in SCION is, depending on the situation, either
-impossible or only marginally useful for an attacker.
-Rewrite sections <a href="#endpoint-identity" class="auto internal xref">Section 5.1</a> and <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a>.<a href="#appendix-B.1-2.1.1" class="pilcrow">¶</a></p>
+            <p id="appendix-B.1-2.1.1">Added suggestions for SCION level spoofing protection.<a href="#appendix-B.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-B.1-2.2">
-            <p id="appendix-B.1-2.2.1">New section "IP Ambiguity" in security considerations: <a href="#attack-ip-ambiguity" class="auto internal xref">Section 7.1</a>.<a href="#appendix-B.1-2.2.1" class="pilcrow">¶</a></p>
+            <p id="appendix-B.1-2.2.1">Reverted <a href="#endpoint-identity" class="auto internal xref">Section 5.1</a> and <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a>
+because the attack can only be mitigated by SCION aware QUIC
+implementations. The previously proposed new rules do not help.<a href="#appendix-B.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-B.1-2.3">
-            <p id="appendix-B.1-2.3.1">Completed section on Address Validation Token, see <a href="#token" class="auto internal xref">Section 5.11</a>.<a href="#appendix-B.1-2.3.1" class="pilcrow">¶</a></p>
+            <p id="appendix-B.1-2.3.1">"Path Injection": clarify that path injection in SCION is,
+depending on the situation, either impossible or only marginally
+useful for an attacker.
+Rewrite sections <a href="#endpoint-identity" class="auto internal xref">Section 5.1</a> and <a href="#attack-path-injection" class="auto internal xref">Section 7.2</a>.<a href="#appendix-B.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-B.1-2.4">
-            <p id="appendix-B.1-2.4.1">Added recommendation to avoid using all SCION paths.<a href="#appendix-B.1-2.4.1" class="pilcrow">¶</a></p>
+            <p id="appendix-B.1-2.4.1">New section "IP Ambiguity" in security considerations:
+<a href="#attack-ip-ambiguity" class="auto internal xref">Section 7.1</a>.<a href="#appendix-B.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-B.1-2.5">
-            <p id="appendix-B.1-2.5.1">Added section <a href="#path-id-allocation" class="auto internal xref">Section 5.12</a> on path ID allocation and exhaustion.<a href="#appendix-B.1-2.5.1" class="pilcrow">¶</a></p>
+            <p id="appendix-B.1-2.5.1">Completed section on Address Validation Token, see <a href="#token" class="auto internal xref">Section 5.11</a>.<a href="#appendix-B.1-2.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.1-2.6">
+            <p id="appendix-B.1-2.6.1">Added recommendation to avoid using all SCION paths.<a href="#appendix-B.1-2.6.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.1-2.7">
+            <p id="appendix-B.1-2.7.1">Added section <a href="#path-id-allocation" class="auto internal xref">Section 5.12</a> on path ID allocation and
+exhaustion.<a href="#appendix-B.1-2.7.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="appendix-B.1-3">Minor changes:<a href="#appendix-B.1-3" class="pilcrow">¶</a></p>
